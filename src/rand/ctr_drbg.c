@@ -19,11 +19,10 @@
 #include "common/endianness.h"
 #include <string.h>
 
-/* Add a 32-bit value to the last 4 bytes of the counter,
-   represented in big-endian format */
-#define CTR_DRBG_INCR32(x, n)                                                  \
+/* Add a 32-bit value to the counter represented in Big-Endian format */
+#define CTR_DRBG_ADD32(V, n)                                                   \
   do {                                                                         \
-    state->V.words[3] = BSWAP32(BSWAP32(state->V.words[3]) + n);               \
+    V.words[3] = BSWAP32(BSWAP32(V.words[3]) + (n));                           \
   } while (0)
 
 /* Section 10.2.1.3.1 */
@@ -70,7 +69,7 @@ status_t ctr_drbg_update(CTR_DRBG_STATE *state, const uint8_t *provided_data,
   aes256_expand_key(&state->K, &ks);
 
   for (size_t i = 0; i < CTR_DRBG_ENTROPY_LEN; i += AES_BLOCK_SIZE) {
-    CTR_DRBG_INCR32(state, 1); /* Increment counter */
+    CTR_DRBG_ADD32(state->V, 1); /* Increment counter */
     aes256_encr_block(state->V.bytes, temp + i, &ks);
   }
 
@@ -136,7 +135,7 @@ status_t ctr_drbg_generate(CTR_DRBG_STATE *state, uint8_t *out, size_t out_len,
 
   /* Generate (out_len / AES_BLOCK_SIZE) blocks */
   while (out_len >= AES_BLOCK_SIZE) {
-    CTR_DRBG_INCR32(state, 1); /* Increment counter */
+    CTR_DRBG_ADD32(state->V, 1); /* Increment counter */
     aes256_encr_block(state->V.bytes, out, &ks);
 
     out += AES_BLOCK_SIZE;
@@ -145,7 +144,7 @@ status_t ctr_drbg_generate(CTR_DRBG_STATE *state, uint8_t *out, size_t out_len,
   /* Generate (out_len % AES_BLOCK_SIZE) bytes */
   if (out_len) {
     uint8_t temp[AES_BLOCK_SIZE];
-    CTR_DRBG_INCR32(state, 1);
+    CTR_DRBG_ADD32(state->V, 1);
     aes256_encr_block(state->V.bytes, temp, &ks);
     memcpy(out, temp, out_len);
   }
