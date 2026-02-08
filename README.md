@@ -1,8 +1,8 @@
-# Xrand
+# xrand
 
 C library for cryptographically secure random number generation.
 
- [![Static Badge](https://img.shields.io/badge/license-GPL%20v3.0-orange?style=plastic&logo=gnu&color=D76764)](https://github.com/vibhav950/Xrand/blob/main/LICENSE) ![Static Badge](https://img.shields.io/badge/version-1.0.1--alpha-blue?style=plastic) [![Static Badge](https://img.shields.io/badge/docs-here-purple?style=plastic&color=8A2BE2)](https://vibhav950.github.io/Xrand/) ![Static Badge](https://img.shields.io/badge/tests-pending-red?style=plastic&color=FF2400)
+ [![Static Badge](https://img.shields.io/badge/license-GPL%20v3.0-orange?style=plastic&logo=gnu&color=D76764)](https://github.com/vibhav950/xrand/blob/main/LICENSE) ![Static Badge](https://img.shields.io/badge/version-1.0.1--alpha-blue?style=plastic) [![Static Badge](https://img.shields.io/badge/docs-here-purple?style=plastic&color=8A2BE2)](https://vibhav950.github.io/xrand/) ![Static Badge](https://img.shields.io/badge/tests-pending-red?style=plastic&color=FF2400)
 
 ## Features
 
@@ -13,7 +13,7 @@ C library for cryptographically secure random number generation.
 
 ## Compatibility State
 
-As of `v1.0.1-alpha`, Xrand is only compatible with `Win32` systems.
+As of `v1.0.1-alpha`, xrand is only compatible with `Win32` systems.
 
 ## System Requirements
 
@@ -31,8 +31,8 @@ pacman -S mingw-w64-x86_64-openssl
 You can obtain a local copy of the Git repository to compile the source code and run tests
 
 ```shell
-git clone https://github.com/vibhav950/Xrand.git
-cd Xrand
+git clone https://github.com/vibhav950/xrand.git
+cd xrand
 make
 ```
 
@@ -65,17 +65,18 @@ int main(void)
 
 ## Development
 
-If you wish to contribute to Xrand either to fix bugs or contribute new features, you will have to fork this GitHub repository `vibhav950/Xrand` and clone your public fork
+If you wish to contribute to xrand either to fix bugs or contribute new features, you will have to fork this GitHub repository `vibhav950/xrand` and clone your public fork
 
 ```shell
-git clone https://github.com/yourname/Xrand.git
+git clone https://github.com/yourname/xrand.git
 ```
 
-This is necessary since all development for this project will be done only via GitHub pull requests. For more details about the contribution policies, see [Contributing](https://github.com/vibhav950/Xrand/blob/main/CONTRIBUTING.md).
+This is necessary since all development for this project will be done only via GitHub pull requests. For more details about the contribution policies, see [Contributing](https://github.com/vibhav950/xrand/blob/main/CONTRIBUTING.md).
 
 ## Todo
 
-* [ ] The [Karatsuba multiplication](https://github.com/vibhav950/Xrand/blob/cd5960b72a57fbacf12e89c54d64206ce559f986/src/common/bignum.c#L1160) function needs fixing; as of this todo the Karatsuba cutoff values have been set to `INT_MAX` until I or somebody can get to fixing this function, and all calls to `bn_mul` are done using the O(m.n) gradeschool approach.
+* [ ] The [Karatsuba multiplication](https://github.com/vibhav950/xrand/blob/cd5960b72a57fbacf12e89c54d64206ce559f986/src/common/bignum.c#L1160) function needs fixing; as of this todo the Karatsuba cutoff values have been set to `INT_MAX` until I or somebody can get to fixing this function, and all calls to `bn_mul` are done using the O(m.n) gradeschool approach.
 * [ ] Modes of operation for providing key streams of different strength levels (or randomness "quality") so that the client application can directly instantiate the generator with a preset security strength.
 * [X] Write tests for the SP 800-90A HASH_DRBG and CTR_DRBG. Although I have unofficially tested the CTR_DRBG before upload (it is currently being used for the MR primality testing and prime generation), the whole thing needs to be done from scratch.
 * [ ] The RNG has no explicit mechanism to calculate a real-time entropy estimate of the pool and block/reject requests from the calling application until the entropy is greater than a 'healthy' threshold. This may especially be a concern for applications that request random bytes from the pool at extremely short intervals, not leaving time for enough fast polls between successive requests (by default, a slow poll is done upon every request).
+

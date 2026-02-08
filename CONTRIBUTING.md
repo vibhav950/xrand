@@ -1,14 +1,14 @@
 # How to contribute
 
-Contributions from the open-source community are essential in keeping this project up-to-date. There are a few general guidelines you will need to follow if you wish to contribute to Xrand, either by fixing a bug or adding a new feature.
+Contributions from the open-source community are essential in keeping this project up-to-date. There are a few general guidelines you will need to follow if you wish to contribute to xrand, either by fixing a bug or adding a new feature.
 
 ## Reporting an issue
 
-To report a security vulnerability, ask a question, or request a new feature, please open an [issue on GitHub](https://github.com/vibhav950/Xrand/issues/). For more information, see [Creating an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue).
+To report a security vulnerability, ask a question, or request a new feature, please open an [issue on GitHub](https://github.com/vibhav950/xrand/issues/). For more information, see [Creating an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue).
 
 Before you report a new issue:
 
-* Look through the [open issues](https://github.com/vibhav950/Xrand/issues) first and make sure a similar one doesn't already exist.
+* Look through the [open issues](https://github.com/vibhav950/xrand/issues) first and make sure a similar one doesn't already exist.
 * Please do not issue spam reports or personal support requests (try to use [Stack Overflow](https://stackoverflow.com/) to resolve such queries).
 
 ### Reporting a bug
@@ -18,7 +18,7 @@ Before you report a new issue:
 
 ## Creating a pull request
 
-To submit a patch or implement a new feature, please open a [pull request on GitHub](https://github.com/vibhav950/Xrand/pulls). For more information, check [Creating a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
+To submit a patch or implement a new feature, please open a [pull request on GitHub](https://github.com/vibhav950/xrand/pulls). For more information, check [Creating a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
 
 **Note:** If you wish to add a new feature, open an issue before starting work to get comments from the community. Someone may already be working on the same thing, or there might be good reasons for why the feature doesn't exist.
 
