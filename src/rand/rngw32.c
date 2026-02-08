@@ -28,7 +28,11 @@
 #include <strsafe.h>
 #include <wchar.h>
 
+#include <intrin.h>
+
+#ifdef _MSC_VER
 #pragma intrinsic(__rdtsc)
+#endif
 
 /* The randomness pool */
 static uint8_t *pRandPool = NULL;
@@ -354,13 +358,13 @@ BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam) {
   Add32(dwProcessId); /* The window thread ID */
 
   GetGUIThreadInfo(dwThreadId, (PGUITHREADINFO)&gui);
-  AddBuf(Ptr8(&gui), sizeof(GUITHREADINFO)); /* GUI info of the thread */
+  AddBuf(PTR8(&gui), sizeof(GUITHREADINFO)); /* GUI info of the thread */
 
   /* Get all sorts of  window information,  including the window
      client area coordinates, bounding rectangle dimensions, and
      the extended window style. */
   GetWindowInfo(hWnd, (PWINDOWINFO)&wi);
-  AddBuf(Ptr8(&wi), sizeof(WINDOWINFO));
+  AddBuf(PTR8(&wi), sizeof(WINDOWINFO));
 
   return TRUE;
 }
@@ -397,11 +401,11 @@ LRESULT CALLBACK MouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 
     /* CRC of the mouse event */
     for (int i = 0; i < sizeof(MSLLHOOKSTRUCT); ++i)
-      crc = UPDC32((Ptr8(&lpMouse))[i], crc);
+      crc = UPDC32((PTR8(&lpMouse))[i], crc);
 
     /* CRC of the time delta */
     for (int i = 0; i < 4; ++i)
-      timeCrc = UPDC32((Ptr8(&dwTimeDelta))[i], timeCrc);
+      timeCrc = UPDC32((PTR8(&dwTimeDelta))[i], timeCrc);
 
     EnterCriticalSection(&randCritSec);
     Add32((uint32_t)(crc + timeCrc));
@@ -447,11 +451,11 @@ LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 
     /* CRC of the keyboard event */
     for (int i = 0; i < sizeof(KBDLLHOOKSTRUCT); ++i)
-      crc = UPDC32((Ptr8(&lpKbd))[i], crc);
+      crc = UPDC32((PTR8(&lpKbd))[i], crc);
 
     /* CRC of the time delta */
     for (int i = 0; i < 4; ++i)
-      timeCrc = UPDC32((Ptr8(&dwTimeDelta))[i], timeCrc);
+      timeCrc = UPDC32((PTR8(&dwTimeDelta))[i], timeCrc);
 
     EnterCriticalSection(&randCritSec);
     Add32((uint32_t)(crc + timeCrc));
@@ -615,32 +619,32 @@ BOOL RandFastPoll(void) {
 
   /* Multiword sytem information */
   GetCaretPos(&point); /* Current caret position */
-  AddBuf(Ptr8(&point), sizeof(POINT));
+  AddBuf(PTR8(&point), sizeof(POINT));
   GetCursorPos(&point); /* Current mouse cursor position */
-  AddBuf(Ptr8(&point), sizeof(POINT));
+  AddBuf(PTR8(&point), sizeof(POINT));
 
   /* Get percent of memory in use, bytes of physical memory, bytes of
      free physical memory, bytes in paging file, free bytes in paging
      file, user bytes of address space, and free user bytes. */
   memoryStatus.dwLength = sizeof(MEMORYSTATUS);
   GlobalMemoryStatus(&memoryStatus);
-  AddBuf(Ptr8(&memoryStatus), sizeof(MEMORYSTATUS));
+  AddBuf(PTR8(&memoryStatus), sizeof(MEMORYSTATUS));
 
   /* Get thread and process creation time, exit time, time in kernel
      mode, and time in user mode in 100ns intervals. */
   handle = GetCurrentThread();
   GetThreadTimes(handle, &creationTime, &exitTime, &kernelTime, &userTime);
-  AddBuf(Ptr8(&creationTime), sizeof(FILETIME));
-  AddBuf(Ptr8(&exitTime), sizeof(FILETIME));
-  AddBuf(Ptr8(&kernelTime), sizeof(FILETIME));
-  AddBuf(Ptr8(&userTime), sizeof(FILETIME));
+  AddBuf(PTR8(&creationTime), sizeof(FILETIME));
+  AddBuf(PTR8(&exitTime), sizeof(FILETIME));
+  AddBuf(PTR8(&kernelTime), sizeof(FILETIME));
+  AddBuf(PTR8(&userTime), sizeof(FILETIME));
 
   handle = GetCurrentProcess();
   GetProcessTimes(handle, &creationTime, &exitTime, &kernelTime, &userTime);
-  AddBuf(Ptr8(&creationTime), sizeof(FILETIME));
-  AddBuf(Ptr8(&exitTime), sizeof(FILETIME));
-  AddBuf(Ptr8(&kernelTime), sizeof(FILETIME));
-  AddBuf(Ptr8(&userTime), sizeof(FILETIME));
+  AddBuf(PTR8(&creationTime), sizeof(FILETIME));
+  AddBuf(PTR8(&exitTime), sizeof(FILETIME));
+  AddBuf(PTR8(&kernelTime), sizeof(FILETIME));
+  AddBuf(PTR8(&userTime), sizeof(FILETIME));
 
   /* Get the minimum and maximum working set size for the
      current process. */
@@ -653,7 +657,7 @@ BOOL RandFastPoll(void) {
      highest possible level of precision (<1us) in
      the Coordinated Universal Time  (UTC) format. */
   GetSystemTimePreciseAsFileTime((LPFILETIME)&systemTimeAsFileTime);
-  AddBuf(Ptr8(&systemTimeAsFileTime), sizeof(LPFILETIME));
+  AddBuf(PTR8(&systemTimeAsFileTime), sizeof(LPFILETIME));
 
   /* According  to  MS docs,  the  majority   of  Windows   systems
      (Windows 7,  Windows Server 2008 R2,  Windows 8,  Windows 8.1,
@@ -674,7 +678,7 @@ BOOL RandFastPoll(void) {
      on systems that  run  Windows XP or later,  the  function  will
      always return with success. */
   if (QueryPerformanceCounter(&ticks)) {
-    AddBuf(Ptr8(&ticks), sizeof(LARGE_INTEGER));
+    AddBuf(PTR8(&ticks), sizeof(LARGE_INTEGER));
   }
 
 #if defined(__x86_64__)
@@ -798,7 +802,7 @@ BOOL RandSlowPoll(void) {
     STARTUPINFO startupInfo;
     startupInfo.cb = sizeof(STARTUPINFO);
     GetStartupInfo(&startupInfo);
-    AddBuf(Ptr8(&startupInfo), sizeof(STARTUPINFO));
+    AddBuf(PTR8(&startupInfo), sizeof(STARTUPINFO));
     bAddedStartupInfo = TRUE;
   }
 
@@ -858,7 +862,7 @@ BOOL RandSlowPoll(void) {
       if (DeviceIoControl(hDevice, IOCTL_DISK_PERFORMANCE, NULL, 0,
                           &diskPerformance, sizeof(diskPerformance), &dwSize,
                           NULL))
-        AddBuf(Ptr8(&diskPerformance), sizeof(DISK_PERFORMANCE));
+        AddBuf(PTR8(&diskPerformance), sizeof(DISK_PERFORMANCE));
 
       CloseHandle(hDevice);
     }
@@ -904,7 +908,7 @@ BOOL RandSlowPoll(void) {
         0x21, /* SystemExceptionInformation	*/
     };
 
-    for (int i = 0; i < count(dwType); ++i) {
+    for (int i = 0; i < COUNTOF(dwType); ++i) {
       /* When the  SystemInformationLength  parameter  is less than the
          size of the requested data, NtQuerySystemInformation() returns
          a  STATUS_INFO_LENGTH_MISMATCH  (0xC0000004)  error  code  and
@@ -926,7 +930,7 @@ BOOL RandSlowPoll(void) {
       /* Recieve the system information into the allocated buffer */
       status = pNtQuerySystemInformation(dwType[i], buf, ulSize, NULL);
       if (status == ERROR_SUCCESS)
-        AddBuf(Ptr8(buf), ulSize);
+        AddBuf(PTR8(buf), ulSize);
       else {
         free(buf);
         Log(ERR_WIN32_WINAPI, FALSE, GetLastError(), __LINE__);
@@ -961,9 +965,9 @@ BOOL RandSlowPoll(void) {
     MIB_TCPSTATS tcpStats;
     MIB_IPSTATS ipStats;
     if (pGetTcpStatisticsEx(&tcpStats, AF_INET) == NO_ERROR)
-      AddBuf(Ptr8(&tcpStats), sizeof(MIB_TCPSTATS));
+      AddBuf(PTR8(&tcpStats), sizeof(MIB_TCPSTATS));
     if (pGetIpStatisticsEx(&ipStats, AF_INET) == NO_ERROR)
-      AddBuf(Ptr8(&ipStats), sizeof(MIB_IPSTATS));
+      AddBuf(PTR8(&ipStats), sizeof(MIB_IPSTATS));
   }
 
   /* Find out whether this is an NT server or workstation if necessary */
@@ -1027,7 +1031,7 @@ BOOL RandSlowPoll(void) {
             (LPWSTR)(isWorkstation ? L"LanmanWorkstation" : L"LanmanServer"), 0,
             0, &lpBuffer) == 0) {
       pNetApiBufferSize(lpBuffer, &dwSize);
-      AddBuf(Ptr8(lpBuffer), dwSize);
+      AddBuf(PTR8(lpBuffer), dwSize);
       pNetApiBufferFree(lpBuffer);
     }
   }
@@ -1043,7 +1047,7 @@ BOOL RandSlowPoll(void) {
                                                     0, 0)) != NULL) {
         if (pGpuZData->version == 1) {
           EnterCriticalSection(&randCritSec);
-          AddBuf(Ptr8(pGpuZData), sizeof(GPUZ_SH_MEM));
+          AddBuf(PTR8(pGpuZData), sizeof(GPUZ_SH_MEM));
           LeaveCriticalSection(&randCritSec);
         }
         UnmapViewOfFile(pGpuZData);
@@ -1062,7 +1066,7 @@ BOOL RandSlowPoll(void) {
       if ((pCoreTempData = (CORE_TEMP_SHARED_DATA *)MapViewOfFile(
                hCoreTempData, FILE_MAP_READ, 0, 0, 0)) != NULL) {
         EnterCriticalSection(&randCritSec);
-        AddBuf(Ptr8(pCoreTempData), sizeof(CORE_TEMP_SHARED_DATA));
+        AddBuf(PTR8(pCoreTempData), sizeof(CORE_TEMP_SHARED_DATA));
         LeaveCriticalSection(&randCritSec);
 
         UnmapViewOfFile(pCoreTempData);
@@ -1183,7 +1187,7 @@ BOOL RandFetchBytes(uint8_t *data, size_t len, int forceSlowPoll) {
 
   /* Invert the pool */
   for (int i = 0; i < RNG_POOL_SIZE / sizeof(uint32_t); ++i) {
-    Ptr32(pRandPool)[i] = Ptr32(pRandPool)[i] ^ 0xffffffff;
+    PTR32(pRandPool)[i] = PTR32(pRandPool)[i] ^ 0xffffffff;
   }
 
   /* Mix the pool */

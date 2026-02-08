@@ -124,7 +124,7 @@ static void trivium_set_seed(void) {
   (void)RngFetchBytes(iv, TRIVIUM_IV_SIZE);
 
   ctr = 0;
-  trivium_init(Ptr32(&trivium_k[0]), Ptr32(&iv[0]));
+  trivium_init(PTR32(&trivium_k[0]), PTR32(&iv[0]));
   zeroize(iv, sizeof(iv));
 }
 

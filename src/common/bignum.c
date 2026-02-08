@@ -1075,7 +1075,7 @@ static int bn_mul_hlp(BIGNUM *A, BIGNUM *B, BIGNUM *X, int alen, int blen);
 /* Karatsuba multiplication using three half-size multiplications
 
    Let R represent the radix (i.e. 2**BIW) and let n represent
-   half the number of limbs/digits/words in min(A, B).
+   half the number of limbs/digits/words in MIN(A, B).
 
    A and B can be represented as:
    A = A1 * R**n + A0
@@ -1538,7 +1538,7 @@ int bn_gcd(BIGNUM *A, BIGNUM *B, BIGNUM *G) {
   BN_CHECK(bn_assign(&TA, A));
   BN_CHECK(bn_assign(&TB, B));
 
-  l = min(bn_lsb(&TA), bn_lsb(&TB));
+  l = MIN(bn_lsb(&TA), bn_lsb(&TB));
 
   BN_CHECK(bn_rshift(&TA, l));
   BN_CHECK(bn_rshift(&TB, l));
@@ -1678,7 +1678,7 @@ static void bn_montmul(BIGNUM *A, BIGNUM *B, BIGNUM *N, bn_uint_t mm,
 
   d = T->p;
   n = N->n;
-  m = min(B->n, n);
+  m = MIN(B->n, n);
 
   for (i = 0; i < n; i++) {
     /* T = (T + u0*B + u1*N) / 2^BIW */
@@ -2003,7 +2003,7 @@ int bn_check_probable_prime(BIGNUM *W, int iter, f_rng_t f_rng, void *rng_ctx) {
   for (i = 0; i < iter; ++i) {
     /* Pick a random 'B' such that len(B) == wlen and 1 < B < W-1 */
     do {
-      if (f_rng(rng_ctx, (byte *)B.p, ceil_div(wlen, 8), NULL, 0) != SUCCESS) {
+      if (f_rng(rng_ctx, (byte *)B.p, CEIL_DIV(wlen, 8), NULL, 0) != SUCCESS) {
         ret = BN_ERR_INTERNAL_FAILURE;
         goto cleanup;
       }
@@ -2115,7 +2115,7 @@ int bn_generate_proabable_prime(BIGNUM *X, int nbits, f_rng_t f_rng,
 
 generate:
   /* Generate an nbits long odd random number */
-  if (f_rng(rng_ctx, (byte *)TX.p, ceil_div(nbits, 8), NULL, 0) != SUCCESS) {
+  if (f_rng(rng_ctx, (byte *)TX.p, CEIL_DIV(nbits, 8), NULL, 0) != SUCCESS) {
     ret = BN_ERR_INTERNAL_FAILURE;
     goto cleanup;
   }

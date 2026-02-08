@@ -60,25 +60,25 @@ typedef unsigned __int16 u16;
 typedef unsigned __int32 u32;
 typedef unsigned __int64 u64;
 
-#define Ptrv(_ptr) ((void *)(_ptr))
-#define Ptr8(_ptr) ((u8 *)(_ptr))
-#define Ptr16(_ptr) ((u16 *)(_ptr))
-#define Ptr32(_ptr) ((u32 *)(_ptr))
-#define Ptr64(_ptr) ((u64 *)(_ptr))
+#define PTRV(_ptr) ((void *)(_ptr))
+#define PTR8(_ptr) ((u8 *)(_ptr))
+#define PTR16(_ptr) ((u16 *)(_ptr))
+#define PTR32(_ptr) ((u32 *)(_ptr))
+#define PTR64(_ptr) ((u64 *)(_ptr))
 
-#ifdef max
-#undef max
+#ifdef MAX
+#undef MAX
 #endif
-#define max(_a, _b) (((_a) > (_b)) ? (_a) : (_b))
+#define MAX(_a, _b) (((_a) > (_b)) ? (_a) : (_b))
 
-#ifdef min
-#undef min
+#ifdef MIN
+#undef MIN
 #endif
-#define min(_a, _b) (((_a) < (_b)) ? (_a) : (_b))
+#define MIN(_a, _b) (((_a) < (_b)) ? (_a) : (_b))
 
-#define count(_arr) (sizeof(_arr) / sizeof((_arr)[0]))
-#define ceil_div(_x, _y) (((_x) + (_y) - 1) / (_y))
-#define floor_div(_x, _y) ((_x) / (_y))
+#define COUNTOF(_arr) (sizeof(_arr) / sizeof((_arr)[0]))
+#define CEIL_DIV(_x, _y) (((_x) + (_y) - 1) / (_y))
+#define FLOOR_DIV(_x, _y) ((_x) / (_y))
 
 typedef enum { false = 0, true } bool;
 
@@ -111,7 +111,7 @@ static volatile memset_t __memz = memset;
 #endif
 
 // The size of the memory to be copied must be a multiple of 32
-#define copy32(dst, src, size)                                                 \
+#define COPY32(dst, src, size)                                                 \
   do {                                                                         \
     volatile __int32 *d = (volatile __int32 *)(dst);                           \
     volatile __int32 *s = (volatile __int32 *)(src);                           \
@@ -120,7 +120,7 @@ static volatile memset_t __memz = memset;
       *d++ = *s++;                                                             \
   } while (0)
 
-#define zcopy32(dst, src, size)                                                \
+#define ZCOPY32(dst, src, size)                                                \
   do {                                                                         \
     volatile __int32 *d = (volatile __int32 *)(dst);                           \
     volatile __int32 *s = (volatile __int32 *)(src);                           \
