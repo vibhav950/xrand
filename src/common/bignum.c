@@ -1098,7 +1098,7 @@ static int bn_mul_hlp(BIGNUM *A, BIGNUM *B, BIGNUM *X, int alen, int blen);
    - This 'divide-and-conquer' approach results in the famous
     O(n**log(3)) or O(n**1.584) elementary operations, making
     it asymptotically faster than the O(n**2) gradeschool
-	algorithm. */
+	  algorithm. */
 static int bn_mul2(BIGNUM *A, BIGNUM *B, BIGNUM *X, int alen, int blen) {
   int ret = 0, a1, a0, b1, b0, R;
   BIGNUM A1, A0, B1, B0, A1B1, A0B0, T;

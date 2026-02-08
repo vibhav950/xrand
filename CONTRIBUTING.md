@@ -37,7 +37,7 @@ To make it easier to review and accept your pull requests, please follow the fol
     * LICENSE
     * =======
     *
-    * Copyright (C) 2024-25  Xrand
+    * Copyright (C) 2024-Present xrand
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
